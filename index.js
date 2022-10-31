@@ -12,9 +12,6 @@ app.use(bodyParser.urlencoded({extended:true,}))
 
 app.listen(3000,()=>{console.log("server running on port 3000.....")})
 
-
-
-
 app.get('/users',db.getUsers),
 app.get('/products/:catagory',db.getProducts)
 
