@@ -43,7 +43,7 @@ const getProducts=(req,res) =>{
 }
 
 
-//create a user account
+//create a buyer user account
 
 const createUser=(req,res) =>{
     const body = req.body
@@ -54,6 +54,24 @@ const createUser=(req,res) =>{
         }
 
         res.status(200).send('added successfully')
+    })
+}
+
+
+//create a buyer user account
+
+const updateUser=(req,res) =>{
+    const body = req.body
+    const id = req.params.id
+    console.log(body);
+    const userId = body.first_name.substring(0, 4).toUpperCase() + body.phone
+    pool.query('UPDATE users SET first_name = $1, last_name = $2, village = $3, city = $4, block = $5, district = $6, farmer_id = $7, aadhaar_id = $8, pincode = $9, phone = $10, user_id = $11, payment_id = $12 where id = $13',
+    [body.first_name, body.last_name, body.village, body.city, body.block, body.district, body.farmer_id, body.aadhaar_id, body.pincode, body.phone, userId, body.payment_id, id],
+    (error, result) => {
+        if (error){
+            throw error;
+        }
+        res.status(200).send('updated successfully')
     })
 }
 
@@ -83,22 +101,6 @@ const Createuser=(req,res)=>{
             throw error
         }
         res.status(201).send(`user created ${result.rows[0].name}`)
-    })
-}
-
-
-//update an user from the db
-const updateUser=(req,res)=>{
-    const id = parseInt(req.param.id)
-    const {name, age} = req.body
-
-    pool.query('UPDATE users SET name=$1, age=$2',[name,age],(error,result)=>{
-        if (error){
-            throw error
-        }
-
-        res.status(200).send(`updates for user with id ${id} are ${name} and ${age}`)
-
     })
 }
 

@@ -16,6 +16,8 @@ app.get('/users',db.getUsers)
 app.get('/products/:catagory',db.getProducts)
 app.post('/users/sign_up', db.createUser)
 app.post('/users/login', db.loginUser)
+app.put('/users/:id', db.updateUser)
+
 
 
 
