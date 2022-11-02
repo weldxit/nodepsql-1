@@ -29,20 +29,6 @@ const loginUser = (req,res)=> {
 }
 
 
-//get a products catagory from database
-
-const getProducts=(req,res) =>{
-    const productCatagory = req.params.catagory
-    pool.query(`SELECT * FROM ${productCatagory} ORDER BY id ASC`,(error,result)=>{
-        if (error){
-            throw error;
-        }
-
-        res.status(200).send(result.rows)
-    })
-}
-
-
 //create a buyer user account
 
 const createUser=(req,res) =>{
@@ -57,8 +43,7 @@ const createUser=(req,res) =>{
     })
 }
 
-
-//create a buyer user account
+//create a seller user account
 
 const updateUser=(req,res) =>{
     const body = req.body
@@ -76,6 +61,65 @@ const updateUser=(req,res) =>{
 }
 
 
+// get all category items
+
+const getCategory =(req,res)=> {
+    pool.query('SELECT * FROM category',(error,result)=>{
+        if (error){
+            throw error;
+        }
+
+        res.status(200).send(result.rows)
+    })
+}
+
+// get all subcategory items based on category id
+
+const getSubCategory =(req,res)=> {
+    const categoryId = req.params.categoryId;
+    pool.query('SELECT * FROM subcategory WHERE category_id = $1', [categoryId], (error,result)=>{
+        if (error){
+            throw error;
+        }
+
+        res.status(200).send(result.rows)
+    })
+}
+
+
+//get a products catagory from database
+
+const getProducts=(req,res) => {
+    const productCatagory = req.params.subcategoryId
+    pool.query('SELECT * FROM products WHERE subcategory_id = $1', [productCatagory],(error,result)=>{
+        if (error){
+            throw error;
+        }
+
+        res.status(200).send(result.rows)
+    })
+}
+
+
+//get recent products catagory from database
+
+const getRecentProducts= (req,res) =>{
+    pool.query(`SELECT * FROM rice ORDER BY id DESC LIMIT 10`).then(
+        (rice) => {
+            pool.query(`SELECT * FROM dal ORDER BY id DESC LIMIT 10`).then((dal) => {
+                pool.query(`SELECT * FROM vegetable ORDER BY id DESC LIMIT 10`, (error, vegetable) => {
+                    if (error) {
+                        throw error;
+                    }
+                    res.status(200).send({rice: rice.rows, dal: dal.rows, vegetable: vegetable.rows})
+                })
+            })
+        }
+    )
+    
+}
+
+
 
 //get a single user from the database
 
@@ -90,17 +134,18 @@ const getUserbyId=(req,res)=>{
     })
 }
 
+//add new products
 
-//create an user on the db
+const createProduct=(req,res) => {
+    const body = req.body
+    const table = req.params.table_name
 
-const Createuser=(req,res)=>{
-    const {name,age} = req.body
-
-    pool.query('INSERT INTO users (name,age) VALUES ($1,$2) RETURNING *',[name,age],(error,result)=>{
+    pool.query(`INSERT INTO ${table} (name, description, price, image, quantity, user_id) VALUES ($1, $2, $3, $4, $5, $6)`,
+    [body.name, body.description, body.price, body.image, body.quantity, body.user_id, body.user_id], (error,result) => {
         if (error){
-            throw error
+            throw error;
         }
-        res.status(201).send(`user created ${result.rows[0].name}`)
+        res.status(200).send('added successfully')
     })
 }
 
@@ -123,10 +168,13 @@ const deleteUser=(req,res)=>{
 module.exports = {
     getUsers,
     getUserbyId,
-    Createuser,
     updateUser,
     deleteUser,
     getProducts,
     createUser,
     loginUser,
+    getRecentProducts,
+    createProduct,
+    getCategory,
+    getSubCategory,
 }

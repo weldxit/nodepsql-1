@@ -12,11 +12,16 @@ app.use(bodyParser.urlencoded({extended:true,}))
 
 app.listen(3000,()=>{console.log("server running on port 3000")})
 
+// get all category
+app.get('/category', db.getCategory)
+app.get('/subcategory/:categoryId', db.getSubCategory);
 app.get('/users',db.getUsers)
-app.get('/products/:catagory',db.getProducts)
+app.get('/products/:subcategoryId',db.getProducts)
 app.post('/users/sign_up', db.createUser)
 app.post('/users/login', db.loginUser)
 app.put('/users/:id', db.updateUser)
+app.get('/recent', db.getRecentProducts)
+app.post('products/catagory/:table_name', db.createProduct)
 
 
 
