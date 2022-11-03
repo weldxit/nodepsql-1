@@ -103,15 +103,15 @@ const getProducts=(req,res) => {
 
 //get recent products catagory from database
 
-const getRecentProducts= (req,res) =>{
-    pool.query(`SELECT * FROM rice ORDER BY id DESC LIMIT 10`).then(
-        (rice) => {
-            pool.query(`SELECT * FROM dal ORDER BY id DESC LIMIT 10`).then((dal) => {
-                pool.query(`SELECT * FROM vegetable ORDER BY id DESC LIMIT 10`, (error, vegetable) => {
+const getRecentProducts= (req,res) => {
+    pool.query('SELECT * FROM subcategory WHERE category_id = $1 ORDER BY id DESC LIMIT 10', [1]).then(
+        (agriculture) => {
+            pool.query('SELECT * FROM subcategory WHERE category_id = $1 ORDER BY id DESC LIMIT 10', [2]).then((horticulture) => {
+                pool.query('SELECT * FROM subcategory WHERE category_id = $1 ORDER BY id DESC LIMIT 10', [3], (error, handicrafts) => {
                     if (error) {
                         throw error;
                     }
-                    res.status(200).send({rice: rice.rows, dal: dal.rows, vegetable: vegetable.rows})
+                    res.status(200).send({agriculture: agriculture.rows, horticulture: horticulture.rows, handicrafts: handicrafts.rows})
                 })
             })
         }
@@ -133,6 +133,7 @@ const getUserbyId=(req,res)=>{
         res.status(200).send(result.rows)
     })
 }
+
 
 //add new products
 
