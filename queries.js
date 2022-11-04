@@ -111,7 +111,7 @@ const getRecentProducts= (req,res) => {
                     if (error) {
                         throw error;
                     }
-                    res.status(200).send({agriculture: agriculture.rows, horticulture: horticulture.rows, handicrafts: handicrafts.rows})
+                    res.status(200).send({Agriculture: agriculture.rows, Horticulture: horticulture.rows, Handicrafts: handicrafts.rows})
                 })
             })
         }
