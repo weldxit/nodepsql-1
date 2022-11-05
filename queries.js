@@ -1,8 +1,9 @@
 const pool= require('./pool')
 //get all users from database
 
-const getUsers =(req,res)=>{
-    pool.query('SELECT * FROM users',(error,result)=>{
+const getUsersById =(req,res)=>{
+    const userId = req.params.userId
+    pool.query('SELECT * FROM users WHERE id = $1', [userId],(error,result)=> {
         if (error){
             throw error;
         }
@@ -34,7 +35,7 @@ const loginUser = (req,res)=> {
 const createUser=(req,res) =>{
     const body = req.body
     console.log(body);
-        pool.query('INSERT INTO users (email, password) VALUES ($1, $2)', [body.email, body.password], (error, result) =>{
+        pool.query('INSERT INTO users (email, password) VALUES ($1, $2)', [body.email, body.password], (error, result) => {
         if (error){
             throw error;
         }
@@ -116,7 +117,6 @@ const getRecentProducts= (req,res) => {
             })
         }
     )
-    
 }
 
 
@@ -126,7 +126,7 @@ const getRecentProducts= (req,res) => {
 const getUserbyId=(req,res)=>{
     const id= req.params.id
 
-    pool.query('SELECT * FROM mock_data WHERE id=$1',[id],(error,result)=>{
+    pool.query('SELECT * FROM mock_data WHERE id=$1',[id],(error,result)=> {
         if (error){
             throw error
         }
@@ -151,6 +151,66 @@ const createProduct=(req,res) => {
 }
 
 
+//add a product to favorite list by user id and product id
+
+const addProductTOFavorite=(req,res)=> {
+    const body = req.body
+
+    pool.query('INSERT INTO favorite (product_id, user_id) VALUES ($1, $2)', [body.productId, body.userId], (error,result) => {
+        if (error){
+            throw error
+        }
+
+        res.status(200).send('added successfully')
+    })
+}
+
+
+//get all favorite products by user id
+
+const getFavoriteProducts=(req,res)=> {
+    const userId = req.params.userId
+    console.log('The user id is', userId);
+    pool.query('SELECT * FROM favorite INNER JOIN products ON favorite.product_id = products.id WHERE favorite.user_id = $1', [userId], (error,result) => {
+        if (error){
+            throw error
+        }
+
+        res.status(200).send(result.rows)
+    })
+}
+
+
+//add a product to cart table by user id and product id
+
+const addProductToCart=(req, res)=> {
+    const body = req.body
+
+    pool.query('INSERT INTO cart (user_id, product_id, quantity) VALUES ($1, $2, $3)', [body.userId, body.productId, body.quantity], (error,result) => {
+        if (error){
+            throw error
+        }
+
+        res.status(200).send('added successfully')
+    })
+}
+
+
+//get all favorite products by user id
+
+const getProductsFromCart=(req,res)=> {
+    const userId = req.params.userId
+    console.log('The user id is', userId);
+    pool.query('SELECT * FROM cart INNER JOIN products ON cart.product_id = products.id WHERE cart.user_id = $1', [userId], (error,result) => {
+        if (error){
+            throw error
+        }
+
+        res.status(200).send(result.rows)
+    })
+}
+
+
 //delete an user from the db
 
 const deleteUser=(req,res)=>{
@@ -167,7 +227,7 @@ const deleteUser=(req,res)=>{
 
 
 module.exports = {
-    getUsers,
+    getUsersById,
     getUserbyId,
     updateUser,
     deleteUser,
@@ -178,4 +238,8 @@ module.exports = {
     createProduct,
     getCategory,
     getSubCategory,
+    addProductTOFavorite,
+    getFavoriteProducts,
+    addProductToCart,
+    getProductsFromCart,
 }
