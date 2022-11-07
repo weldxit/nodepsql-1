@@ -50,8 +50,6 @@ const createUser = (req, res) => {
   );
 };
 
-
-
 //create a seller user account
 
 const updateUser = (req, res) => {
@@ -164,7 +162,6 @@ const getRecentProducts = (req, res) => {
     });
 };
 
-
 //get a single user from the database
 
 const getUserbyId = (req, res) => {
@@ -276,6 +273,25 @@ const getProductsFromCart = (req, res) => {
   );
 };
 
+// update a cart by cart id
+
+const modifyCart = (req, res) => {
+  const body = req.body;
+  const cartId = req.params.cartId;
+
+  pool.query(
+    "UPDATE cart SET cart_product_quantity = $1 WHERE cart_primery_id = $2",
+    [body.quantity, cartId],
+    (error, result) => {
+      if (error) {
+        throw error;
+      }
+
+      res.status(200).send("updated successfully");
+    }
+  );
+};
+
 //delete an user from the db
 
 const deleteUser = (req, res) => {
@@ -306,4 +322,5 @@ module.exports = {
   getFavoriteProducts,
   addProductToCart,
   getProductsFromCart,
+  modifyCart,
 };

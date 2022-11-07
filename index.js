@@ -55,6 +55,9 @@ app.post("/add_cart", db.addProductToCart);
 //get all cart's products by user id
 app.get("/cart/:userId", db.getProductsFromCart);
 
+//modify a cart items details
+app.put("/modify_cart/:cartId", db.modifyCart);
+
 // app.get('/users/:id',db.getUserbyId)
 // app.post('/users',db.Createuser)
 // app.put('/users/:id',db.updateUser)
