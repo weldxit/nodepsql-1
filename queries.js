@@ -24,7 +24,7 @@ const loginUser = (req, res) => {
         throw error;
       }
       if (result.rowCount > 0) {
-        res.status(200).send("User Available");
+        res.status(200).send(result.rows);
       } else {
         res.status(404).send("User Not Found");
       }
