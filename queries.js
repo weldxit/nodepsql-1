@@ -261,7 +261,7 @@ const getProductsFromCart = (req, res) => {
   const userId = req.params.userId;
   console.log("The user id is", userId);
   pool.query(
-    "SELECT * FROM cart INNER JOIN products ON cart.product_id = products.id WHERE cart.user_id = $1",
+    "SELECT * FROM cart INNER JOIN products ON cart.product_id = products.id WHERE cart.user_id = $1 ORDER BY cart.cart_primery_id DESC",
     [userId],
     (error, result) => {
       if (error) {
