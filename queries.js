@@ -50,6 +50,25 @@ const createUser = (req, res) => {
   );
 };
 
+
+//create a seller user account from registration application
+
+const createSeller = (req, res) => {
+  const body = req.body;
+  console.log(body);
+  pool.query(
+    "INSERT INTO users (first_name, last_name, village, city, block, district, sco_id, aadhaar_id, pincode, phone, email, password, unique_id, payment_id, location, image, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)",
+    [body.firstName, body.lastName, body.village, body.city, body.block, body.district, body.scoId, body.aadhaarId, body.pincode, body.phone, body.email, body.password, body.firstName+body.phone, body.paymentId, body.location, body.image, body.status],
+    (error, result) => {
+      if (error) {
+        throw error;
+      }
+
+      res.status(200).send(result.rows);
+    }
+  );
+};
+
 //create a seller user account
 
 const updateUser = (req, res) => {
@@ -323,4 +342,5 @@ module.exports = {
   addProductToCart,
   getProductsFromCart,
   modifyCart,
+  createSeller,
 };

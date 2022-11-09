@@ -35,6 +35,9 @@ app.post("/users/login", db.loginUser);
 //create a seller user account by update upser
 app.put("/users/:id", db.updateUser);
 
+//create a seller account from registration application
+app.post("/users/seller_register", db.createSeller);
+
 //get recent products and category
 app.get("/recent", db.getRecentProducts);
 
