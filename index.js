@@ -61,6 +61,9 @@ app.get("/cart/:userId", db.getProductsFromCart);
 //modify a cart items details
 app.put("/modify_cart/:cartId", db.modifyCart);
 
+//get types of products available in the DB
+app.get("/types/:subcategoryId", db.getTypesBySubcategoryId);
+
 // app.get('/users/:id',db.getUserbyId)
 // app.post('/users',db.Createuser)
 // app.put('/users/:id',db.updateUser)

@@ -50,7 +50,6 @@ const createUser = (req, res) => {
   );
 };
 
-
 //create a seller user account from registration application
 
 const createSeller = (req, res) => {
@@ -58,7 +57,25 @@ const createSeller = (req, res) => {
   console.log(body);
   pool.query(
     "INSERT INTO users (first_name, last_name, village, city, block, district, sco_id, aadhaar_id, pincode, phone, email, password, unique_id, payment_id, location, image, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)",
-    [body.firstName, body.lastName, body.village, body.city, body.block, body.district, body.scoId, body.aadhaarId, body.pincode, body.phone, body.email, body.password, body.firstName+body.phone, body.paymentId, body.location, body.image, body.status],
+    [
+      body.firstName,
+      body.lastName,
+      body.village,
+      body.city,
+      body.block,
+      body.district,
+      body.scoId,
+      body.aadhaarId,
+      body.pincode,
+      body.phone,
+      body.email,
+      body.password,
+      body.firstName + body.phone,
+      body.paymentId,
+      body.location,
+      body.image,
+      body.status,
+    ],
     (error, result) => {
       if (error) {
         throw error;
@@ -201,7 +218,7 @@ const createProduct = (req, res) => {
   const table = req.params.table_name;
 
   pool.query(
-    'INSERT INTO products (product_name, description, price, image, quantity, rating, user_id, subcategory_id, type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
+    "INSERT INTO products (product_name, description, price, image, quantity, rating, user_id, subcategory_id, type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
     [
       body.name,
       body.description,
@@ -211,7 +228,7 @@ const createProduct = (req, res) => {
       0,
       body.userId,
       body.subcategoryId,
-      body.type
+      body.type,
     ],
     (error, result) => {
       if (error) {
@@ -313,6 +330,24 @@ const modifyCart = (req, res) => {
   );
 };
 
+//get a type of product by subcategory Id
+
+const getTypesBySubcategoryId = (req, res) => {
+  const subcategoryId = req.params.subcategoryId;
+
+  pool.query(
+    "SELECT * FROM type WHERE subcategory_id = $1",
+    [subcategoryId],
+    (error, result) => {
+      if (error) {
+        throw error;
+      }
+
+      res.status(200).send(result.rows);
+    }
+  );
+};
+
 //delete an user from the db
 
 const deleteUser = (req, res) => {
@@ -345,4 +380,5 @@ module.exports = {
   getProductsFromCart,
   modifyCart,
   createSeller,
+  getTypesBySubcategoryId,
 };
