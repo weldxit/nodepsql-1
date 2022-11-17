@@ -201,15 +201,17 @@ const createProduct = (req, res) => {
   const table = req.params.table_name;
 
   pool.query(
-    `INSERT INTO ${table} (name, description, price, image, quantity, user_id) VALUES ($1, $2, $3, $4, $5, $6)`,
+    'INSERT INTO products (product_name, description, price, image, quantity, rating, user_id, subcategory_id, type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
     [
       body.name,
       body.description,
       body.price,
       body.image,
       body.quantity,
-      body.user_id,
-      body.user_id,
+      0,
+      body.userId,
+      body.subcategoryId,
+      body.type
     ],
     (error, result) => {
       if (error) {

@@ -42,7 +42,7 @@ app.post("/users/seller_register", db.createSeller);
 app.get("/recent", db.getRecentProducts);
 
 //add a product to product table
-app.post("products/catagory/:table_name", db.createProduct);
+app.post("/products", db.createProduct);
 
 //add a product to favorite table
 app.post("/add_favorite", db.addProductTOFavorite);
