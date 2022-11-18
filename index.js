@@ -51,6 +51,7 @@ app.post("/add_favorite", db.addProductTOFavorite);
 app.get("/favorite/:userId", db.getFavoriteProducts);
 
 //remove a product from favorite table
+app.delete("/favorite/:favoriteId", db.removeProductFromFavorite);
 
 // add a product to cart table
 app.post("/add_cart", db.addProductToCart);
@@ -60,6 +61,9 @@ app.get("/cart/:userId", db.getProductsFromCart);
 
 //modify a cart items details
 app.put("/modify_cart/:cartId", db.modifyCart);
+
+//remove a product from cart
+app.delete("/cart/:cartId", db.removeProductFromCart);
 
 //get types of products available in the DB
 app.get("/types/:subcategoryId", db.getTypesBySubcategoryId);

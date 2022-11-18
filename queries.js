@@ -275,6 +275,24 @@ const getFavoriteProducts = (req, res) => {
   );
 };
 
+//remove favorite product from favorite table
+
+const removeProductFromFavorite = (req, res) => {
+  const favoriteId = req.params.favoriteId;
+
+  pool.query(
+    "DELETE FROM favorite WHERE favorite_primery_id = $1",
+    [favoriteId],
+    (error, result) => {
+      if (error) {
+        throw error;
+      }
+
+      res.status(200).send("removed successfully");
+    }
+  );
+};
+
 //add a product to cart table by user id and product id
 
 const addProductToCart = (req, res) => {
@@ -289,24 +307,6 @@ const addProductToCart = (req, res) => {
       }
 
       res.status(200).send("added successfully");
-    }
-  );
-};
-
-//get all favorite products by user id
-
-const getProductsFromCart = (req, res) => {
-  const userId = req.params.userId;
-  console.log("The user id is", userId);
-  pool.query(
-    "SELECT * FROM cart INNER JOIN products ON cart.product_id = products.id WHERE cart.user_id = $1 ORDER BY cart.cart_primery_id DESC",
-    [userId],
-    (error, result) => {
-      if (error) {
-        throw error;
-      }
-
-      res.status(200).send(result.rows);
     }
   );
 };
@@ -328,6 +328,38 @@ const modifyCart = (req, res) => {
       res.status(200).send("updated successfully");
     }
   );
+};
+
+//get all cart products by user id
+
+const getProductsFromCart = (req, res) => {
+  const userId = req.params.userId;
+  console.log("The user id is", userId);
+  pool.query(
+    "SELECT * FROM cart INNER JOIN products ON cart.product_id = products.id WHERE cart.user_id = $1 ORDER BY cart.cart_primery_id DESC",
+    [userId],
+    (error, result) => {
+      if (error) {
+        throw error;
+      }
+
+      res.status(200).send(result.rows);
+    }
+  );
+};
+
+// remove a product from cart by cartId
+
+const removeProductFromCart = (req, res) => {
+  const cartId = req.params.cartId;
+
+  pool.query("DELETE FROM cart WHERE cart_primery_id = $1", [cartId], (error, result) => {
+    if (error) {
+      throw error;
+    }
+
+    res.status(200).send("removed successfully");
+  });
 };
 
 //get a type of product by subcategory Id
@@ -381,4 +413,6 @@ module.exports = {
   modifyCart,
   createSeller,
   getTypesBySubcategoryId,
+  removeProductFromFavorite,
+  removeProductFromCart,
 };
