@@ -281,7 +281,7 @@ const addProductToCart = (req, res) => {
   const body = req.body;
 
   pool.query(
-    "INSERT INTO cart (user_id, product_id, quantity) VALUES ($1, $2, $3)",
+    "INSERT INTO cart (user_id, product_id, cart_product_quantity) VALUES ($1, $2, $3)",
     [body.userId, body.productId, body.quantity],
     (error, result) => {
       if (error) {
