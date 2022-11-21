@@ -380,10 +380,30 @@ const getTypesBySubcategoryId = (req, res) => {
   );
 };
 
+
+//get a list of products by search
+
+const searchProducts = (req, res) => {
+  const searchName = req.params.searchName.toString();
+  const finalName = searchName.charAt(0).toUpperCase() + searchName.slice(1);
+  const searchParams = finalName.toCamelCase(finalName);
+
+  console.log('Search name :', searchParams);
+
+  pool.query(`SELECT * FROM products WHERE product_name LIKE '%${searchParams}%' OR type LIKE '%${searchParams}%'`, (error, result) => {
+
+    if (error) {
+      throw error;
+    }
+
+    res.status(200).send(result.rows);
+  });
+};
+
 //delete an user from the db
 
 const deleteUser = (req, res) => {
-  const id = req.param.id;
+  const id = req.params.id;
 
   pool.query("DELETE FROM users WHERE id=$1", [id], (error, result) => {
     if (error) {
@@ -393,6 +413,11 @@ const deleteUser = (req, res) => {
     res.status(200).send(`user deleted with id ${id}`);
   });
 };
+
+String.prototype.toCamelCase = function(str) {
+  return str
+      .replace(/\s(.)/g, function($1) { return $1.toUpperCase(); });
+}
 
 module.exports = {
   getUsersById,
@@ -415,4 +440,5 @@ module.exports = {
   getTypesBySubcategoryId,
   removeProductFromFavorite,
   removeProductFromCart,
+  searchProducts,
 };

@@ -68,6 +68,9 @@ app.delete("/cart/:cartId", db.removeProductFromCart);
 //get types of products available in the DB
 app.get("/types/:subcategoryId", db.getTypesBySubcategoryId);
 
+//get products from search results
+app.get("/search/:searchName", db.searchProducts);
+
 // app.get('/users/:id',db.getUserbyId)
 // app.post('/users',db.Createuser)
 // app.put('/users/:id',db.updateUser)
