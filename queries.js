@@ -215,12 +215,17 @@ const getUserbyId = (req, res) => {
 
 const createProduct = (req, res) => {
   const body = req.body;
-  const table = req.params.table_name;
+
+  const productName = body.name.toString();
+  const finalName = productName.charAt(0).toUpperCase() + productName.slice(1);
+  const searchParams = finalName.toCamelCase(finalName);
+
+  console.log(searchParams);
 
   pool.query(
     "INSERT INTO products (product_name, description, price, image, quantity, rating, user_id, subcategory_id, type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
     [
-      body.name,
+      searchParams,
       body.description,
       body.price,
       body.image,
