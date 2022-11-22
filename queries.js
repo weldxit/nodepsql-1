@@ -170,18 +170,18 @@ const getProducts = (req, res) => {
 const getRecentProducts = (req, res) => {
   pool
     .query(
-      "SELECT * FROM subcategory WHERE category_id = $1 ORDER BY id DESC LIMIT 10",
+      "SELECT * FROM subcategory WHERE category_id = $1 ORDER BY id ASC LIMIT 10",
       [1]
     )
     .then((agriculture) => {
       pool
         .query(
-          "SELECT * FROM subcategory WHERE category_id = $1 ORDER BY id DESC LIMIT 10",
+          "SELECT * FROM subcategory WHERE category_id = $1 ORDER BY id ASC LIMIT 10",
           [2]
         )
         .then((horticulture) => {
           pool.query(
-            "SELECT * FROM subcategory WHERE category_id = $1 ORDER BY id DESC LIMIT 10",
+            "SELECT * FROM subcategory WHERE category_id = $1 ORDER BY id ASC LIMIT 10",
             [3],
             (error, handicrafts) => {
               if (error) {
