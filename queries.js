@@ -177,23 +177,31 @@ const getRecentProducts = (req, res) => {
       pool
         .query(
           "SELECT * FROM subcategory WHERE category_id = $1 ORDER BY id ASC LIMIT 10",
-          [2]
+          [4]
         )
-        .then((horticulture) => {
-          pool.query(
-            "SELECT * FROM subcategory WHERE category_id = $1 ORDER BY id ASC LIMIT 10",
-            [3],
-            (error, handicrafts) => {
-              if (error) {
-                throw error;
-              }
-              res.status(200).send({
-                Agriculture: agriculture.rows,
-                Horticulture: horticulture.rows,
-                Handicrafts: handicrafts.rows,
-              });
-            }
-          );
+        .then((handlooms) => {
+          pool
+            .query(
+              "SELECT * FROM subcategory WHERE category_id = $1 ORDER BY id ASC LIMIT 10",
+              [2]
+            )
+            .then((horticulture) => {
+              pool.query(
+                "SELECT * FROM subcategory WHERE category_id = $1 ORDER BY id ASC LIMIT 10",
+                [3],
+                (error, handicrafts) => {
+                  if (error) {
+                    throw error;
+                  }
+                  res.status(200).send({
+                    Agriculture: agriculture.rows,
+                    Horticulture: horticulture.rows,
+                    Handlooms: handlooms.rows,
+                    Handicrafts: handicrafts.rows,
+                  });
+                }
+              );
+            });
         });
     });
 };
