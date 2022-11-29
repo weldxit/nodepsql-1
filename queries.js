@@ -92,9 +92,9 @@ const updateUser = (req, res) => {
   const body = req.body;
   const id = req.params.id;
   console.log(body);
-  const userId = body.first_name.substring(0, 4).toUpperCase() + body.phone;
+  // const userId = body.first_name.substring(0, 4).toUpperCase() + body.phone;
   pool.query(
-    "UPDATE users SET first_name = $1, last_name = $2, village = $3, city = $4, block = $5, district = $6, farmer_id = $7, aadhaar_id = $8, pincode = $9, phone = $10, user_id = $11, payment_id = $12 where id = $13",
+    "UPDATE users SET first_name = $1, last_name = $2, village = $3, city = $4, block = $5, district = $6, sco_id = $7, aadhaar_id = $8, pincode = $9, phone = $10 WHERE id = $11",
     [
       body.first_name,
       body.last_name,
@@ -102,12 +102,10 @@ const updateUser = (req, res) => {
       body.city,
       body.block,
       body.district,
-      body.farmer_id,
+      body.sco_id,
       body.aadhaar_id,
       body.pincode,
       body.phone,
-      userId,
-      body.payment_id,
       id,
     ],
     (error, result) => {
