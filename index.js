@@ -71,6 +71,8 @@ app.get("/types/:subcategoryId", db.getTypesBySubcategoryId);
 //get products from search results
 app.get("/search/:searchName", db.searchProducts);
 
+app.get("/", db.sendMessage);
+
 // app.get('/users/:id',db.getUserbyId)
 // app.post('/users',db.Createuser)
 // app.put('/users/:id',db.updateUser)
